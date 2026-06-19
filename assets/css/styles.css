@@ -291,6 +291,29 @@ body.menu-open{overflow:hidden}
   .reveal{opacity:1;transform:none}
 }
 
+/* ---------- Language switcher (floating, sticky) ---------- */
+.lang-switch{
+  position:fixed;right:22px;bottom:22px;z-index:150;display:flex;align-items:center;gap:3px;
+  background:rgba(242,236,226,.94);backdrop-filter:blur(10px);
+  border:1px solid var(--line);border-radius:40px;padding:5px;
+  box-shadow:0 10px 30px rgba(42,38,32,.18);
+}
+.lang-switch button{
+  font-family:var(--sans);font-size:12px;font-weight:600;letter-spacing:.04em;
+  padding:7px 14px;border-radius:30px;color:var(--ink-soft);transition:.25s var(--ease);line-height:1;
+}
+.lang-switch button:hover{color:var(--ink)}
+.lang-switch button.on{background:var(--clay);color:#fff}
+.lang-switch .sep{color:var(--ink-faint);font-size:11px}
+@media(max-width:600px){.lang-switch{right:14px;bottom:14px}.lang-switch button{padding:6px 11px}}
+
+/* ---------- Chinese typography fallbacks ---------- */
+html[lang="zh"] body{font-family:"PingFang SC","Hiragino Sans GB","Microsoft YaHei","Noto Sans SC",sans-serif}
+html[lang="zh"] .title,html[lang="zh"] h1,html[lang="zh"] h2,html[lang="zh"] h3,html[lang="zh"] .ser,html[lang="zh"] .serif{
+  font-family:"Songti SC","Noto Serif SC","Source Han Serif SC","STSong","Microsoft YaHei",serif;font-style:normal;
+}
+html[lang="zh"] .pcard__img::after{content:"查看"}
+
 /* ---------- Mobile nav ---------- */
 @media(max-width:840px){
   .nav-toggle{display:block}

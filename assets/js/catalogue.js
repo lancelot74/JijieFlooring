@@ -1,5 +1,5 @@
 /* Catalogue: render grid, combinable filters, lightbox with deep-linking.
-   Depends on window.PRODUCTS (assets/js/products.js). */
+   Language-aware via window.I18N (see i18n.js). Depends on window.PRODUCTS. */
 (function () {
   var P = window.PRODUCTS || [];
   var grid = document.getElementById('catgrid');
@@ -7,6 +7,8 @@
 
   var WECHAT = '13819223555';
   var INSTAGRAM = 'https://instagram.com/chinajijiefloor';
+  function T(s) { return (window.I18N ? window.I18N.tx(s) : s); }
+  function L() { return (window.I18N ? window.I18N.lang : 'en'); }
 
   var SPECIES_ORDER = ['Oak', 'Teak', 'Black Walnut', 'Ash', 'Wenge', 'Rosewood', 'Birch'];
   var FAMILY_ORDER = ['Versailles', 'Princess Anne', 'Octagon Star', 'Diamond', 'Checkerboard', 'Lotus', 'Leaf', 'Chinese Knot', 'Pentagon', 'Floral', 'Herringbone', 'Chevron', 'Long Plank'];
@@ -14,17 +16,15 @@
   var COLL_LABEL = { geometric: 'Classic Geometric Parquet', artistic: 'Artistic Shaped Inlay', plank: 'Herringbone, Chevron & Plank' };
 
   var state = { collection: 'all', family: 'all', species: 'all' };
-  var view = []; // current filtered list
-
-  // ---- read filters from URL hash (e.g. #species=Oak, #collection=geometric) ----
+  var view = [];
   var openSlug = null;
+
   (function readHash() {
     var h = location.hash.replace(/^#/, '');
     if (!h) return;
     h.split('&').forEach(function (pair) {
       var kv = pair.split('=');
-      var k = decodeURIComponent(kv[0] || '');
-      var v = decodeURIComponent(kv[1] || '');
+      var k = decodeURIComponent(kv[0] || ''); var v = decodeURIComponent(kv[1] || '');
       if (k === 'species' && SPECIES_ORDER.indexOf(v) > -1) state.species = v;
       else if (k === 'family' && FAMILY_ORDER.indexOf(v) > -1) state.family = v;
       else if (k === 'collection' && (v === 'geometric' || v === 'artistic' || v === 'plank')) state.collection = v;
@@ -32,7 +32,8 @@
     });
   })();
 
-  // ---- build filter chip rows ----
+  function nameOf(p) { return L() === 'zh' ? (T(p.species) + '·' + T(p.family)) : p.name; }
+
   function chip(group, value, label, active) {
     var b = document.createElement('button');
     b.className = 'fbtn' + (active ? ' is-active' : '');
@@ -40,7 +41,6 @@
     b.textContent = label;
     b.addEventListener('click', function () {
       state[group] = (state[group] === value) ? 'all' : value;
-      if (value === 'all') state[group] = 'all';
       render();
     });
     return b;
@@ -50,12 +50,13 @@
     var c = document.getElementById('f-collection');
     var f = document.getElementById('f-family');
     var s = document.getElementById('f-species');
-    c.appendChild(chip('collection', 'all', 'All', state.collection === 'all'));
-    COLLECTIONS.forEach(function (x) { c.appendChild(chip('collection', x[0], x[1], state.collection === x[0])); });
-    f.appendChild(chip('family', 'all', 'All', state.family === 'all'));
-    FAMILY_ORDER.forEach(function (x) { f.appendChild(chip('family', x, x, state.family === x)); });
-    s.appendChild(chip('species', 'all', 'All', state.species === 'all'));
-    SPECIES_ORDER.forEach(function (x) { s.appendChild(chip('species', x, x, state.species === x)); });
+    c.innerHTML = ''; f.innerHTML = ''; s.innerHTML = '';
+    c.appendChild(chip('collection', 'all', T('All'), state.collection === 'all'));
+    COLLECTIONS.forEach(function (x) { c.appendChild(chip('collection', x[0], T(x[1]), state.collection === x[0])); });
+    f.appendChild(chip('family', 'all', T('All'), state.family === 'all'));
+    FAMILY_ORDER.forEach(function (x) { f.appendChild(chip('family', x, T(x), state.family === x)); });
+    s.appendChild(chip('species', 'all', T('All'), state.species === 'all'));
+    SPECIES_ORDER.forEach(function (x) { s.appendChild(chip('species', x, T(x), state.species === x)); });
   }
 
   function syncChips() {
@@ -75,7 +76,8 @@
     syncChips();
     grid.innerHTML = '';
     if (!view.length) {
-      grid.innerHTML = '<div class="no-results">No patterns match this combination. <button class="clearbtn" id="clear2">Clear filters</button></div>';
+      grid.innerHTML = '<div class="no-results">' + T('No patterns match this combination.') +
+        ' <button class="clearbtn" id="clear2">' + T('Clear filters') + '</button></div>';
       document.getElementById('clear2').addEventListener('click', clearAll);
     } else {
       var frag = document.createDocumentFragment();
@@ -85,15 +87,17 @@
         btn.setAttribute('aria-label', 'View ' + p.name);
         btn.innerHTML =
           '<div class="pcard__img"><img loading="lazy" src="assets/img/grid/' + p.slug + '.jpg" alt="' + p.name + ' parquet flooring"></div>' +
-          '<div class="pcard__cap"><span class="n">' + p.name + '</span><span class="c">No. ' + p.code + '</span></div>' +
-          '<div class="pcard__sp">' + p.species + '</div>';
+          '<div class="pcard__cap"><span class="n">' + nameOf(p) + '</span><span class="c">No. ' + p.code + '</span></div>' +
+          '<div class="pcard__sp">' + T(p.species) + '</div>';
         btn.addEventListener('click', function () { openLightbox(i); });
         frag.appendChild(btn);
       });
       grid.appendChild(frag);
     }
     var cnt = document.getElementById('count');
-    if (cnt) cnt.innerHTML = '<b>' + view.length + '</b> of ' + P.length + ' patterns';
+    if (cnt) cnt.innerHTML = (L() === 'zh')
+      ? ('<b>' + view.length + '</b> / ' + P.length + ' 款')
+      : ('<b>' + view.length + '</b> of ' + P.length + ' patterns');
   }
 
   function clearAll() { state = { collection: 'all', family: 'all', species: 'all' }; render(); }
@@ -107,15 +111,15 @@
     idx = i; var p = view[i]; if (!p) return;
     lb.querySelector('#lb-img').src = 'assets/img/detail/' + p.slug + '.jpg';
     lb.querySelector('#lb-img').alt = p.name + ' parquet flooring';
-    lb.querySelector('#lb-fam').textContent = p.family;
-    lb.querySelector('#lb-name').textContent = p.name;
+    lb.querySelector('#lb-fam').textContent = T(p.family);
+    lb.querySelector('#lb-name').textContent = nameOf(p);
     lb.querySelector('#lb-code').textContent = 'No. ' + p.code;
-    lb.querySelector('#lb-collection').textContent = COLL_LABEL[p.collection];
-    lb.querySelector('#lb-family').textContent = p.family;
-    lb.querySelector('#lb-species').textContent = p.species;
+    lb.querySelector('#lb-collection').textContent = T(COLL_LABEL[p.collection]);
+    lb.querySelector('#lb-family').textContent = T(p.family);
+    lb.querySelector('#lb-species').textContent = T(p.species);
     lb.querySelector('#lb-ref').textContent = p.code;
     lb.classList.add('open');
-    document.body.classList.add('menu-open'); // lock scroll
+    document.body.classList.add('menu-open');
     setHash('#p=' + p.slug);
   }
   function closeLightbox() {
@@ -123,10 +127,8 @@
     document.body.classList.remove('menu-open');
     setHash('');
   }
-  // replaceState can throw on file:// in some browsers — fail silently there.
   function setHash(h) {
-    try { history.replaceState(null, '', h || location.pathname); }
-    catch (e) { /* file:// — ignore */ }
+    try { history.replaceState(null, '', h || location.pathname); } catch (e) {}
   }
   function step(d) { var n = idx + d; if (n < 0) n = view.length - 1; if (n >= view.length) n = 0; openLightbox(n); }
 
@@ -141,19 +143,24 @@
       else if (e.key === 'ArrowLeft') step(-1);
       else if (e.key === 'ArrowRight') step(1);
     });
-    // Inquiry buttons
     lb.querySelector('#lb-ig').href = INSTAGRAM;
     lb.querySelector('#lb-wechat').addEventListener('click', function () {
       var btn = this;
       var done = function () {
         var t = btn.querySelector('.lbl'); var old = t.textContent;
-        t.textContent = 'Copied ✓'; setTimeout(function () { t.textContent = old; }, 1600);
+        t.textContent = T('Copied ✓'); setTimeout(function () { t.textContent = old; }, 1600);
       };
       if (navigator.clipboard && navigator.clipboard.writeText) {
         navigator.clipboard.writeText(WECHAT).then(done, function () { window.location.href = 'contact.html'; });
       } else { window.location.href = 'contact.html'; }
     });
   }
+
+  // Re-render dynamic content when language changes
+  document.addEventListener('langchange', function () {
+    buildFilters(); render();
+    if (lb && lb.classList.contains('open')) openLightbox(idx);
+  });
 
   // ---- init ----
   buildFilters();
