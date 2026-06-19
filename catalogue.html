@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Catalogue — Jijie Floor</title>
+<meta name="description" content="Browse all 43 engineered parquet patterns from Jijie Floor. Filter by collection, pattern family and wood species.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;1,9..144,300;1,9..144,400&family=Hanken+Grotesk:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/styles.css">
+</head>
+<body>
+
+<header class="site-head solid">
+  <a class="wordmark" href="index.html">Jijie <b>Floor</b></a>
+  <nav class="nav" aria-label="Primary">
+    <a href="collections.html">Collections</a>
+    <a href="catalogue.html" class="active">Catalogue</a>
+    <a href="about.html">About</a>
+    <a href="contact.html">Contact</a>
+  </nav>
+  <button class="nav-toggle" aria-label="Toggle menu"><span></span><span></span><span></span></button>
+</header>
+
+<section class="page-head container">
+  <p class="eyebrow"><span class="idx">—</span> The Catalogue</p>
+  <h1 class="title d2">Forty-three patterns,<br>one specimen library.</h1>
+  <p class="lede big">Engineered multilayer parquet in seven hardwoods. Filter by collection, pattern family or species; open any tile to inquire.</p>
+</section>
+
+<!-- FILTERS -->
+<div class="filters">
+  <div class="container">
+    <div class="filter-row"><span class="leg">Collection</span><span id="f-collection"></span></div>
+    <div class="filter-row"><span class="leg">Family</span><span id="f-family"></span></div>
+    <div class="filter-row"><span class="leg">Species</span><span id="f-species"></span></div>
+  </div>
+</div>
+
+<section class="container">
+  <div class="cat-meta">
+    <span class="count" id="count"></span>
+    <button class="clearbtn" id="clear">Clear all filters</button>
+  </div>
+  <div class="catgrid" id="catgrid"></div>
+</section>
+
+<!-- LIGHTBOX -->
+<div class="lb" id="lb" role="dialog" aria-modal="true" aria-label="Pattern detail">
+  <div class="lb__scrim"></div>
+  <div class="lb__panel">
+    <button class="lb__nav prev" aria-label="Previous">←</button>
+    <button class="lb__nav next" aria-label="Next">→</button>
+    <button class="lb__close" aria-label="Close">×</button>
+    <div class="lb__img"><img id="lb-img" src="" alt=""></div>
+    <div class="lb__info">
+      <p class="eyebrow"><span class="idx">Pattern</span> <span id="lb-fam"></span></p>
+      <h2 class="title d3" id="lb-name"></h2>
+      <div class="lb__code" id="lb-code"></div>
+      <div class="lb__specs">
+        <div><span class="k">Collection</span><span class="v" id="lb-collection"></span></div>
+        <div><span class="k">Pattern family</span><span class="v" id="lb-family"></span></div>
+        <div><span class="k">Wood species</span><span class="v" id="lb-species"></span></div>
+        <div><span class="k">Reference</span><span class="v" id="lb-ref"></span></div>
+      </div>
+      <p class="muted" style="font-size:13.5px;margin-bottom:22px">Engineered multilayer panel. Custom sizes, finishes &amp; species available on request.</p>
+      <div class="lb__cta">
+        <button class="btn" id="lb-wechat"><span class="lbl">WeChat 13819223555</span></button>
+        <a class="btn btn--ghost" id="lb-ig" target="_blank" rel="noopener">Instagram <span class="arr">→</span></a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer class="foot">
+  <div class="container foot__top">
+    <div class="foot__brand">
+      <div class="wordmark">Jijie Floor</div>
+      <p>Engineered multilayer solid-wood parquet, sourced and exported from China.</p>
+    </div>
+    <div class="foot__cols">
+      <div class="foot__col">
+        <h4>Explore</h4>
+        <a href="collections.html">Collections</a>
+        <a href="catalogue.html">Catalogue</a>
+        <a href="about.html">About</a>
+      </div>
+      <div class="foot__col">
+        <h4>Inquire</h4>
+        <a href="https://instagram.com/chinajijiefloor" target="_blank" rel="noopener">Instagram</a>
+        <span>WeChat 13819223555</span>
+        <a href="contact.html">Contact</a>
+      </div>
+    </div>
+  </div>
+  <div class="container foot__bar">
+    <span>© <span data-year>2026</span> Jijie Floor</span>
+    <span>Engineered parquet · OEM / ODM · Export</span>
+  </div>
+</footer>
+
+<script src="assets/js/products.js"></script>
+<script src="assets/js/catalogue.js"></script>
+<script src="assets/js/site.js"></script>
+</body>
+</html>

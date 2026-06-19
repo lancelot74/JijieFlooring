@@ -1,3 +1,5 @@
-.superpowers/
-node_modules/
 .DS_Store
+.superpowers/
+_shots/
+_source_images/
+node_modules/
