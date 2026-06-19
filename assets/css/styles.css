@@ -132,7 +132,7 @@ body.menu-open{overflow:hidden}
 @media(max-width:760px){.hero__meta{display:none}}
 
 /* ---------- Collection tiles ---------- */
-.tiles{display:grid;grid-template-columns:1fr 1fr;gap:clamp(14px,2vw,26px)}
+.tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(14px,2vw,26px)}
 .tile{position:relative;display:block;overflow:hidden;border-radius:3px;aspect-ratio:4/3;color:#fff;isolation:isolate}
 .tile img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform 1s var(--ease)}
 .tile::after{content:"";position:absolute;inset:0;background:linear-gradient(0deg,rgba(20,16,12,.66),rgba(20,16,12,.05) 60%);z-index:1}
@@ -142,7 +142,8 @@ body.menu-open{overflow:hidden}
 .tile__body .t{font-family:var(--serif);font-weight:300;font-size:clamp(24px,2.6vw,34px);margin-top:8px;display:flex;align-items:center;gap:12px}
 .tile__body .arr{transition:transform .4s var(--ease)}
 .tile:hover .arr{transform:translateX(6px)}
-@media(max-width:720px){.tiles{grid-template-columns:1fr}}
+@media(max-width:980px){.tiles{grid-template-columns:1fr 1fr}}
+@media(max-width:680px){.tiles{grid-template-columns:1fr}}
 
 /* ---------- Featured grid ---------- */
 .fgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:clamp(12px,1.6vw,20px)}

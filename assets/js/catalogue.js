@@ -9,9 +9,9 @@
   var INSTAGRAM = 'https://instagram.com/chinajijiefloor';
 
   var SPECIES_ORDER = ['Oak', 'Teak', 'Black Walnut', 'Ash', 'Wenge', 'Rosewood', 'Birch'];
-  var FAMILY_ORDER = ['Versailles', 'Princess Anne', 'Octagon Star', 'Diamond', 'Checkerboard', 'Lotus', 'Leaf', 'Chinese Knot', 'Pentagon', 'Floral'];
-  var COLLECTIONS = [['geometric', 'Classic Geometric'], ['artistic', 'Artistic Inlay']];
-  var COLL_LABEL = { geometric: 'Classic Geometric Parquet', artistic: 'Artistic Shaped Inlay' };
+  var FAMILY_ORDER = ['Versailles', 'Princess Anne', 'Octagon Star', 'Diamond', 'Checkerboard', 'Lotus', 'Leaf', 'Chinese Knot', 'Pentagon', 'Floral', 'Herringbone', 'Chevron', 'Long Plank'];
+  var COLLECTIONS = [['geometric', 'Classic Geometric'], ['artistic', 'Artistic Inlay'], ['plank', 'Herringbone, Chevron & Plank']];
+  var COLL_LABEL = { geometric: 'Classic Geometric Parquet', artistic: 'Artistic Shaped Inlay', plank: 'Herringbone, Chevron & Plank' };
 
   var state = { collection: 'all', family: 'all', species: 'all' };
   var view = []; // current filtered list
@@ -27,7 +27,7 @@
       var v = decodeURIComponent(kv[1] || '');
       if (k === 'species' && SPECIES_ORDER.indexOf(v) > -1) state.species = v;
       else if (k === 'family' && FAMILY_ORDER.indexOf(v) > -1) state.family = v;
-      else if (k === 'collection' && (v === 'geometric' || v === 'artistic')) state.collection = v;
+      else if (k === 'collection' && (v === 'geometric' || v === 'artistic' || v === 'plank')) state.collection = v;
       else if (k === 'p') openSlug = v;
     });
   })();
