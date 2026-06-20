@@ -195,6 +195,8 @@ body.menu-open{overflow:hidden}
 .qr-wrap{justify-self:end;text-align:center}
 .qr-wrap img{width:200px;height:200px;border:10px solid #fff;box-shadow:0 18px 40px rgba(42,38,32,.14);border-radius:4px}
 .qr-wrap .cap{font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-soft);margin-top:16px}
+.qr-fb{display:inline-flex;align-items:center;gap:7px;margin-top:14px;font-size:12px;font-weight:600;letter-spacing:.04em;color:var(--ink);border-bottom:1px solid var(--clay);padding-bottom:3px;transition:.3s var(--ease)}
+.qr-fb:hover{color:var(--clay)}
 @media(max-width:820px){.inq-grid{grid-template-columns:1fr}.qr-wrap{justify-self:start}}
 
 /* ---------- Footer ---------- */
