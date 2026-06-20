@@ -11,7 +11,7 @@
   function L() { return (window.I18N ? window.I18N.lang : 'en'); }
 
   var SPECIES_ORDER = ['Oak', 'Teak', 'Black Walnut', 'Ash', 'Wenge', 'Rosewood', 'Birch'];
-  var FAMILY_ORDER = ['Versailles', 'Princess Anne', 'Octagon Star', 'Diamond', 'Checkerboard', 'Lotus', 'Leaf', 'Chinese Knot', 'Pentagon', 'Floral', 'Herringbone', 'Chevron', 'Long Plank'];
+  var FAMILY_ORDER = ['Versailles', 'Princess Anne', 'Octagon Star', 'Diamond', 'Checkerboard', 'Lotus', 'Leaf', 'Chinese Knot', 'Pentagon', 'Floral', 'Herringbone', 'Chevron', 'Sawtooth', 'Long Plank', 'Shaped Inlay'];
   var COLLECTIONS = [['geometric', 'Classic Geometric'], ['artistic', 'Artistic Inlay'], ['plank', 'Herringbone, Chevron & Plank']];
   var COLL_LABEL = { geometric: 'Classic Geometric Parquet', artistic: 'Artistic Shaped Inlay', plank: 'Herringbone, Chevron & Plank' };
 
@@ -32,7 +32,10 @@
     });
   })();
 
-  function nameOf(p) { return L() === 'zh' ? (T(p.species) + '·' + T(p.family)) : p.name; }
+  function nameOf(p) {
+    if (L() !== 'zh') return p.name;
+    return p.species ? (T(p.species) + '·' + T(p.family)) : T(p.name);
+  }
 
   function chip(group, value, label, active) {
     var b = document.createElement('button');
@@ -117,6 +120,9 @@
     lb.querySelector('#lb-collection').textContent = T(COLL_LABEL[p.collection]);
     lb.querySelector('#lb-family').textContent = T(p.family);
     lb.querySelector('#lb-species').textContent = T(p.species);
+    lb.querySelector('#lb-row-species').style.display = p.species ? '' : 'none';
+    lb.querySelector('#lb-size').textContent = p.size || '';
+    lb.querySelector('#lb-row-size').style.display = p.size ? '' : 'none';
     lb.querySelector('#lb-ref').textContent = p.code;
     lb.classList.add('open');
     document.body.classList.add('menu-open');

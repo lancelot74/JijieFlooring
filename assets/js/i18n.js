@@ -24,8 +24,8 @@
     "home.coll.h2": "三种方式，打造非凡地板。",
     "home.coll.lede": "从法式宫廷几何、手工异型拼花，到鱼骨拼、人字拼与长板橡木——每一款地板均采用稳定的多层实木结构。",
     "Classic Geometric": "古典几何", "Artistic Shaped Inlay · 异型拼花": "艺术异型拼花",
-    "Versailles, Diamond & Star": "凡尔赛、钻石与八角星", "Lotus, Leaf & Knot": "荷花、树叶与中国结", "Engineered oak": "多层实木橡木",
-    "home.feat.h2": "系列一瞥。", "home.feat.browse": "浏览全部 91 款",
+    "Versailles, Diamond & Star": "凡尔赛、钻石与八角星", "Lotus, Leaf & Knot": "荷花、树叶与中国结", "Engineered oak & birch": "多层实木橡木与桦木",
+    "home.feat.h2": "系列一瞥。", "home.feat.browse": "浏览完整产品目录",
     "Oak · Versailles": "橡木·凡尔赛", "Teak · Lotus": "柚木·荷花", "Walnut · Chinese Knot": "黑胡桃·中国结",
     "Oak · Checkerboard": "橡木·棋盘格", "Teak · Diamond": "柚木·钻石", "Oak · Chevron": "橡木·鱼骨拼",
     "Walnut · Versailles": "黑胡桃·凡尔赛", "Oak · Long Plank": "橡木·长板",
@@ -41,10 +41,10 @@
     "WeChat": "微信", "qr.cap": "扫码添加微信",
 
     /* ---- catalogue ---- */
-    "The Catalogue": "产品目录", "cat.h1": "九十一款图案，三大系列。",
+    "The Catalogue": "产品目录", "cat.h1": "完整产品目录，三大系列。",
     "cat.lede": "多层实木拼花、手工异型拼花及鱼骨/人字拼与长板地板，共七种硬木。可按系列、图案或木种筛选；点击任意图片即可咨询。",
     "Family": "图案", "Species": "木种", "Clear all filters": "清除全部筛选",
-    "Pattern": "图案", "Pattern family": "图案系列", "Wood species": "木种", "Reference": "编号",
+    "Pattern": "图案", "Pattern family": "图案系列", "Wood species": "木种", "Size": "尺寸", "Reference": "编号",
     "lb.desc": "多层实木面板。可按需定制尺寸、表面处理与木种。",
     "All": "全部", "Clear filters": "清除筛选", "Copied ✓": "已复制 ✓",
     "No patterns match this combination.": "没有符合该筛选条件的图案。",
@@ -56,7 +56,7 @@
     /* families */
     "Versailles": "凡尔赛", "Princess Anne": "安妮公主", "Octagon Star": "八角星", "Diamond": "钻石",
     "Checkerboard": "棋盘格", "Lotus": "荷花", "Leaf": "树叶", "Chinese Knot": "中国结",
-    "Pentagon": "五边形", "Floral": "花样", "Herringbone": "人字拼", "Chevron": "鱼骨拼", "Long Plank": "长板",
+    "Pentagon": "五边形", "Floral": "花样", "Herringbone": "人字拼", "Chevron": "鱼骨拼", "Sawtooth": "锯齿纹", "Long Plank": "长板", "Shaped Inlay": "异形拼花",
     /* species */
     "Oak": "橡木", "Teak": "柚木", "Black Walnut": "黑胡桃", "Ash": "白蜡木",
     "Wenge": "鸡翅木", "Rosewood": "花梨木", "Birch": "桦木",
