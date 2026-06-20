@@ -24,7 +24,7 @@
     "home.coll.h2": "三种方式，打造非凡地板。",
     "home.coll.lede": "从法式宫廷几何、手工异型拼花，到鱼骨拼、人字拼与长板橡木——每一款地板均采用稳定的多层实木结构。",
     "Classic Geometric": "古典几何", "Artistic Shaped Inlay · 异型拼花": "艺术异型拼花",
-    "Versailles, Diamond & Star": "凡尔赛、钻石与八角星", "Lotus, Leaf & Knot": "荷花、树叶与中国结", "Engineered oak & birch": "多层实木橡木与桦木",
+    "Versailles, Diamond & Star": "凡尔赛、钻石与八角星", "Lotus, Leaf & Knot": "荷花、树叶与中国结", "Engineered solid wood, herringbone & chevron": "多层实木，人字拼与鱼骨拼",
     "home.feat.h2": "系列一瞥。", "home.feat.browse": "浏览完整产品目录",
     "Oak · Versailles": "橡木·凡尔赛", "Teak · Lotus": "柚木·荷花", "Walnut · Chinese Knot": "黑胡桃·中国结",
     "Oak · Checkerboard": "橡木·棋盘格", "Teak · Diamond": "柚木·钻石", "Oak · Chevron": "橡木·鱼骨拼",
