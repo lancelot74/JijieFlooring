@@ -225,16 +225,23 @@
   }
 
   // ===== UI: gate =====
-  function unlock() {
+  function unlock(confirm) {
     show($('gate'), false);
     show($('app'), true);
+    if (confirm) {
+      window.scrollTo(0, 0);
+      var note = $('unlock-note');
+      show(note, true);
+      clearTimeout(unlock._t);
+      unlock._t = setTimeout(function () { show(note, false); }, 6000);
+    }
     token = localStorage.getItem('gh_token') || '';
     if (token) enterTools(); else show($('token-setup'), true);
   }
   $('gate-form').addEventListener('submit', function (e) {
     e.preventDefault();
     try {
-      if (sha256hex($('pass').value) === PASS_HASH) { sessionStorage.setItem('adm_ok', '1'); unlock(); }
+      if (sha256hex($('pass').value) === PASS_HASH) { sessionStorage.setItem('adm_ok', '1'); unlock(true); }
       else { $('gate-err').textContent = 'Wrong passphrase.'; }
     } catch (err) { $('gate-err').textContent = 'Error: ' + err.message; }
   });

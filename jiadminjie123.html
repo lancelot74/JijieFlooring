@@ -49,6 +49,8 @@
   .help{background:#fff;border:1px solid var(--line);border-radius:11px;padding:16px 18px;font-size:13.5px;color:var(--muted);margin-bottom:20px}
   .help code{background:var(--paper);padding:1px 5px;border-radius:4px;color:var(--ink)}
 
+  .note-ok{display:flex;align-items:center;gap:9px;background:rgba(74,124,63,.12);border:1px solid rgba(74,124,63,.4);color:#3f6e35;padding:13px 16px;border-radius:10px;font-weight:600;margin-bottom:22px}
+
   .preview{margin-top:10px}
   .preview canvas{max-width:140px;height:auto;border:1px solid var(--line);border-radius:9px;display:block}
   .status{font-size:14px;margin-top:16px;min-height:1.3em}
@@ -86,6 +88,7 @@
 
 <!-- APP -->
 <div class="wrap" id="app" hidden>
+  <div class="note-ok" id="unlock-note" hidden>✓ Passphrase accepted — welcome in.</div>
   <header class="top">
     <h1>Catalogue admin</h1>
     <span class="token-badge" id="token-badge"></span>
