@@ -66,6 +66,8 @@
   .rowbtn.del{color:#a13b2a;border-color:rgba(161,59,42,.4)}
   .rowbtn.restore{color:#4a7c3f;border-color:rgba(74,124,63,.4)}
   .rowbtn:hover{background:var(--paper)}
+  .del-head{font-size:15px;margin:28px 0 12px;padding-top:22px;border-top:1px solid var(--line);display:flex;align-items:center;gap:8px}
+  .del-count{font-size:12px;color:var(--muted);font-weight:400;font-family:'Hanken Grotesk',sans-serif}
 
   /* language switcher (matches the rest of the site) */
   .lang-switch{position:fixed;right:22px;bottom:22px;z-index:150;display:flex;align-items:center;gap:3px;background:rgba(242,236,226,.94);backdrop-filter:blur(10px);border:1px solid var(--line);border-radius:40px;padding:5px;box-shadow:0 10px 30px rgba(42,38,32,.18)}
@@ -177,6 +179,10 @@
         <span class="list-count" id="list-count"></span>
       </div>
       <div id="prod-list"></div>
+      <div id="deleted-wrap" hidden>
+        <h3 class="del-head"><span data-i18n>Deleted entries</span> <span class="del-count" id="deleted-count"></span></h3>
+        <div id="deleted-list"></div>
+      </div>
       <p class="status" id="manage-status"></p>
     </section>
   </section>

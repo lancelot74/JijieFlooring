@@ -213,15 +213,11 @@
         }, 'Add product ' + product.slug);
       });
   }
+  // Delete = hide (reversible) for BOTH generated and admin-added products, so every
+  // deletion can be restored from the "Deleted entries" section. Images are kept either way.
   function doDelete(slug) {
     return withAdmin(function (d) {
-      var ai = d.adds.findIndex(function (p) { return p.slug === slug; });
-      if (ai > -1) { // admin-added → remove outright (also drop any hide entry)
-        d.adds.splice(ai, 1);
-        var hi = d.hidden.indexOf(slug); if (hi > -1) d.hidden.splice(hi, 1);
-      } else if (d.hidden.indexOf(slug) === -1) { // generated → hide
-        d.hidden.push(slug);
-      }
+      if (d.hidden.indexOf(slug) === -1) d.hidden.push(slug);
     }, 'Hide product ' + slug);
   }
   function doRestore(slug) {
@@ -343,29 +339,38 @@
 
   // ===== UI: manage =====
   $('search').addEventListener('input', renderList);
+  function buildRow(p) {
+    var hidden = isHidden(p.slug);
+    var meta = 'No. ' + escHtml(p.code) + ' · ' + escHtml(t(COLL_EN[p.collection] || p.collection)) + (p.species ? ' · ' + escHtml(t(p.species)) : '');
+    var row = document.createElement('div');
+    row.className = 'prow' + (hidden ? ' is-hidden' : '');
+    row.innerHTML =
+      '<img class="pthumb" loading="lazy" src="' + GRID_DIR + escHtml(p.slug) + '.jpg" alt="" onerror="this.style.visibility=\'hidden\'">' +
+      '<div class="pmeta"><div class="pn">' + escHtml(p.name) + '</div>' +
+      '<div class="pc">' + meta + '</div></div>' +
+      (hidden ? '<span class="badge">' + t('hidden') + '</span>' : '') +
+      '<button class="rowbtn ' + (hidden ? 'restore' : 'del') + '" data-slug="' + escHtml(p.slug) + '">' + (hidden ? t('Restore') : t('Delete')) + '</button>';
+    return row;
+  }
   function renderList() {
     var q = $('search').value.toLowerCase();
     var items = displayProducts().filter(function (p) {
       if (!q) return true;
       return (p.name + ' ' + p.code + ' ' + p.collection + ' ' + (p.species || '') + ' ' + (p.family || '')).toLowerCase().indexOf(q) > -1;
     });
-    $('list-count').textContent = (L() === 'zh') ? (items.length + ' 个产品') : (items.length + (items.length === 1 ? ' product' : ' products'));
+    var active = items.filter(function (p) { return !isHidden(p.slug); });
+    var deleted = items.filter(function (p) { return isHidden(p.slug); });
+
+    $('list-count').textContent = (L() === 'zh') ? (active.length + ' 个产品') : (active.length + (active.length === 1 ? ' product' : ' products'));
     var wrap = $('prod-list'); wrap.innerHTML = '';
-    items.forEach(function (p) {
-      var hidden = isHidden(p.slug);
-      var meta = 'No. ' + escHtml(p.code) + ' · ' + escHtml(t(COLL_EN[p.collection] || p.collection)) + (p.species ? ' · ' + escHtml(t(p.species)) : '');
-      var row = document.createElement('div');
-      row.className = 'prow' + (hidden ? ' is-hidden' : '');
-      row.innerHTML =
-        '<img class="pthumb" loading="lazy" src="' + GRID_DIR + escHtml(p.slug) + '.jpg" alt="" onerror="this.style.visibility=\'hidden\'">' +
-        '<div class="pmeta"><div class="pn">' + escHtml(p.name) + '</div>' +
-        '<div class="pc">' + meta + '</div></div>' +
-        (hidden ? '<span class="badge">' + t('hidden') + '</span>' : '') +
-        '<button class="rowbtn ' + (hidden ? 'restore' : 'del') + '" data-slug="' + escHtml(p.slug) + '">' + (hidden ? t('Restore') : t('Delete')) + '</button>';
-      wrap.appendChild(row);
-    });
+    active.forEach(function (p) { wrap.appendChild(buildRow(p)); });
+
+    var dwrap = $('deleted-list'); dwrap.innerHTML = '';
+    deleted.forEach(function (p) { dwrap.appendChild(buildRow(p)); });
+    show($('deleted-wrap'), deleted.length > 0);
+    $('deleted-count').textContent = deleted.length ? ('(' + deleted.length + ')') : '';
   }
-  $('prod-list').addEventListener('click', function (e) {
+  function onRowClick(e) {
     var b = e.target.closest('.rowbtn'); if (!b) return;
     var slug = b.dataset.slug, restore = b.classList.contains('restore');
     var ask = (L() === 'zh') ? ('确定要从目录中隐藏“' + slug + '”吗？') : ('Hide “' + slug + '” from the catalogue?');
@@ -378,7 +383,9 @@
       setStatus('manage-status', errPrefix() + err.message, true);
       b.disabled = false; b.textContent = restore ? t('Restore') : t('Delete');
     });
-  });
+  }
+  $('prod-list').addEventListener('click', onRowClick);
+  $('deleted-list').addEventListener('click', onRowClick);
 
   function setStatus(id, msg, isErr, isOk) {
     var el = $(id); el.textContent = msg;

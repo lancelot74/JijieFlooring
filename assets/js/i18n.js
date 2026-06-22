@@ -100,7 +100,7 @@
     "Catalogue admin": "产品目录管理", "token saved": "令牌已保存", "change": "更换",
     "GitHub token": "GitHub 令牌", "Save token": "保存令牌",
     "Checking token…": "正在验证令牌…", "Token rejected (401). Check it and try again.": "令牌被拒绝（401），请检查后重试。",
-    "Add product": "添加产品", "Manage / delete": "管理 / 删除",
+    "Add product": "添加产品", "Manage / delete": "管理 / 删除", "Deleted entries": "已删除的条目",
     "Product photo": "产品照片", "Name": "名称", "Reference code": "编号",
     "Size (optional)": "尺寸（可选）", "中文名 (optional)": "中文名（可选）", "Publish product": "发布产品",
     "✓ Passphrase accepted — welcome in.": "✓ 口令正确 — 欢迎使用。",
