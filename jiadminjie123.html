@@ -46,9 +46,6 @@
   .tab{appearance:none;border:1px solid var(--line);background:#fff;padding:9px 16px;border-radius:999px;font:inherit;font-weight:600;cursor:pointer;color:var(--ink)}
   .tab.on{background:var(--ink);color:#fff;border-color:var(--ink)}
 
-  .help{background:#fff;border:1px solid var(--line);border-radius:11px;padding:16px 18px;font-size:13.5px;color:var(--muted);margin-bottom:20px}
-  .help code{background:var(--paper);padding:1px 5px;border-radius:4px;color:var(--ink)}
-
   .note-ok{display:flex;align-items:center;gap:9px;background:rgba(74,124,63,.12);border:1px solid rgba(74,124,63,.4);color:#3f6e35;padding:13px 16px;border-radius:10px;font-weight:600;margin-bottom:22px}
 
   .preview{margin-top:10px}
@@ -69,6 +66,17 @@
   .rowbtn.del{color:#a13b2a;border-color:rgba(161,59,42,.4)}
   .rowbtn.restore{color:#4a7c3f;border-color:rgba(74,124,63,.4)}
   .rowbtn:hover{background:var(--paper)}
+
+  /* language switcher (matches the rest of the site) */
+  .lang-switch{position:fixed;right:22px;bottom:22px;z-index:150;display:flex;align-items:center;gap:3px;background:rgba(242,236,226,.94);backdrop-filter:blur(10px);border:1px solid var(--line);border-radius:40px;padding:5px;box-shadow:0 10px 30px rgba(42,38,32,.18)}
+  .lang-switch button{appearance:none;border:none;background:none;cursor:pointer;font:inherit;font-size:12px;font-weight:600;letter-spacing:.04em;padding:7px 14px;border-radius:30px;color:var(--muted);line-height:1}
+  .lang-switch button:hover{color:var(--ink)}
+  .lang-switch button.on{background:var(--clay);color:#fff}
+  .lang-switch .sep{color:var(--muted);font-size:11px}
+
+  /* Chinese font fallbacks (styles.css isn't loaded here) */
+  html[lang="zh"] body,html[lang="zh"] input,html[lang="zh"] button,html[lang="zh"] select{font-family:'Hanken Grotesk',"PingFang SC","Microsoft YaHei","Noto Sans CJK SC",system-ui,sans-serif}
+  html[lang="zh"] h1,html[lang="zh"] h2,html[lang="zh"] h3{font-family:'Fraunces',"Songti SC","Noto Serif CJK SC",Georgia,serif}
 </style>
 </head>
 <body>
@@ -76,39 +84,32 @@
 <!-- GATE -->
 <div class="gate" id="gate">
   <form class="card" id="gate-form" autocomplete="off">
-    <h1>Restricted</h1>
-    <p class="sub">Enter the passphrase to continue.</p>
+    <h1 data-i18n>Restricted</h1>
+    <p class="sub" data-i18n>Enter the passphrase to continue.</p>
     <div class="field">
       <input type="password" id="pass" placeholder="Passphrase" autocomplete="off" autofocus>
     </div>
-    <button class="btn" type="submit" style="width:100%">Enter</button>
+    <button class="btn" type="submit" style="width:100%" data-i18n>Enter</button>
     <p class="err" id="gate-err"></p>
   </form>
 </div>
 
 <!-- APP -->
 <div class="wrap" id="app" hidden>
-  <div class="note-ok" id="unlock-note" hidden>✓ Passphrase accepted — welcome in.</div>
+  <div class="note-ok" id="unlock-note" hidden data-i18n>✓ Passphrase accepted — welcome in.</div>
   <header class="top">
-    <h1>Catalogue admin</h1>
+    <h1 data-i18n>Catalogue admin</h1>
     <span class="token-badge" id="token-badge"></span>
   </header>
 
   <!-- TOKEN SETUP -->
   <section id="token-setup" hidden>
-    <div class="help">
-      To publish changes you need a <strong>GitHub access token</strong> for the
-      <code>lancelot74/JijieFlooring</code> repository. Create a
-      <a href="https://github.com/settings/tokens?type=beta" target="_blank" rel="noopener">fine-grained token</a>
-      scoped to <em>only that repository</em> with <strong>Contents: Read and write</strong>, then paste it below.
-      It is stored only in this browser and never published.
-    </div>
     <form id="token-form" autocomplete="off">
       <div class="field">
-        <label for="token-input">GitHub token</label>
+        <label for="token-input" data-i18n>GitHub token</label>
         <input type="password" id="token-input" placeholder="github_pat_…" autocomplete="off">
       </div>
-      <button class="btn" type="submit">Save token</button>
+      <button class="btn" type="submit" data-i18n>Save token</button>
       <p class="status err" id="token-status"></p>
     </form>
   </section>
@@ -116,55 +117,55 @@
   <!-- TOOLS -->
   <section id="tools" hidden>
     <div class="tabs">
-      <button class="tab on" id="tab-btn-add" type="button">Add product</button>
-      <button class="tab" id="tab-btn-manage" type="button">Manage / delete</button>
+      <button class="tab on" id="tab-btn-add" type="button" data-i18n>Add product</button>
+      <button class="tab" id="tab-btn-manage" type="button" data-i18n>Manage / delete</button>
     </div>
 
     <!-- ADD -->
     <section id="tab-add">
       <form id="add-form" autocomplete="off">
         <div class="field">
-          <label for="f-photo">Product photo</label>
+          <label for="f-photo" data-i18n>Product photo</label>
           <input type="file" id="f-photo" accept="image/*">
           <div class="preview" id="preview"></div>
         </div>
         <div class="field">
-          <label for="f-name">Name <span style="color:var(--clay)">*</span></label>
+          <label for="f-name"><span data-i18n>Name</span> <span style="color:var(--clay)">*</span></label>
           <input type="text" id="f-name" placeholder="e.g. Oak · Versailles">
         </div>
         <div class="row2">
           <div class="field">
-            <label for="f-collection">Collection</label>
+            <label for="f-collection" data-i18n>Collection</label>
             <select id="f-collection"></select>
           </div>
           <div class="field">
-            <label for="f-code">Reference code</label>
+            <label for="f-code" data-i18n>Reference code</label>
             <input type="text" id="f-code" placeholder="auto if blank">
           </div>
         </div>
         <div class="row2">
           <div class="field">
-            <label for="f-family">Pattern family</label>
+            <label for="f-family" data-i18n>Pattern family</label>
             <input type="text" id="f-family" list="dl-family" placeholder="e.g. Versailles">
             <datalist id="dl-family"></datalist>
           </div>
           <div class="field">
-            <label for="f-species">Wood species</label>
+            <label for="f-species" data-i18n>Wood species</label>
             <input type="text" id="f-species" list="dl-species" placeholder="e.g. Oak (blank ok)">
             <datalist id="dl-species"></datalist>
           </div>
         </div>
         <div class="row2">
           <div class="field">
-            <label for="f-size">Size (optional)</label>
+            <label for="f-size" data-i18n>Size (optional)</label>
             <input type="text" id="f-size" placeholder="e.g. 600×125×14.5/1.2mm">
           </div>
           <div class="field">
-            <label for="f-namezh">中文名 (optional)</label>
+            <label for="f-namezh" data-i18n>中文名 (optional)</label>
             <input type="text" id="f-namezh" placeholder="e.g. 橡木·凡尔赛">
           </div>
         </div>
-        <button class="btn btn--clay" type="submit" id="add-submit">Publish product</button>
+        <button class="btn btn--clay" type="submit" id="add-submit" data-i18n>Publish product</button>
         <p class="status" id="add-status"></p>
       </form>
     </section>
@@ -185,6 +186,7 @@
 <script src="assets/js/products-online.js"></script>
 <script>window.__GEN_PRODUCTS = (window.PRODUCTS || []).slice();</script>
 <script src="assets/js/products-admin.js"></script>
+<script src="assets/js/i18n.js"></script>
 <script src="assets/js/jiadminjie123.js"></script>
 </body>
 </html>

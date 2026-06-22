@@ -92,7 +92,27 @@
     "Pattern & species": "图案与木种", "ct.cap1.d": "图案名称或编号，以及您考虑的木种。",
     "Quantity": "数量", "ct.cap2.d": "大致面积（平方米或平方英尺），或经销所需的整柜量。",
     "Market": "市场", "ct.cap3.d": "目的国——便于我们就规格与物流提供建议。",
-    "Timeline": "时间安排", "ct.cap4.d": "您需要样品的时间及交货时间。"
+    "Timeline": "时间安排", "ct.cap4.d": "您需要样品的时间及交货时间。",
+
+    /* ---- admin page (jiadminjie123.html) ---- */
+    "Restricted": "仅限管理员", "Enter the passphrase to continue.": "请输入口令以继续。",
+    "Enter": "进入", "Passphrase": "口令", "Wrong passphrase.": "口令错误。",
+    "Catalogue admin": "产品目录管理", "token saved": "令牌已保存", "change": "更换",
+    "GitHub token": "GitHub 令牌", "Save token": "保存令牌",
+    "Checking token…": "正在验证令牌…", "Token rejected (401). Check it and try again.": "令牌被拒绝（401），请检查后重试。",
+    "Add product": "添加产品", "Manage / delete": "管理 / 删除",
+    "Product photo": "产品照片", "Name": "名称", "Reference code": "编号",
+    "Size (optional)": "尺寸（可选）", "中文名 (optional)": "中文名（可选）", "Publish product": "发布产品",
+    "✓ Passphrase accepted — welcome in.": "✓ 口令正确 — 欢迎使用。",
+    "Choose a photo first.": "请先选择一张照片。", "Name is required.": "请填写名称。",
+    "Could not read that image.": "无法读取该图片。", "Publishing… this takes a few seconds.": "正在发布…需要几秒钟。",
+    "✓ Saved. Live in about a minute.": "✓ 已保存。约一分钟后上线。",
+    "Delete": "删除", "Restore": "恢复", "hidden": "已隐藏",
+    /* admin placeholders */
+    "e.g. Oak · Versailles": "例如：橡木·凡尔赛", "auto if blank": "留空则自动生成",
+    "e.g. Versailles": "例如：凡尔赛", "e.g. Oak (blank ok)": "例如：橡木（可留空）",
+    "e.g. 600×125×14.5/1.2mm": "例如：600×125×14.5/1.2mm", "e.g. 橡木·凡尔赛": "例如：橡木·凡尔赛",
+    "Search name, code, species…": "搜索名称、编号、木种…"
   };
 
   var current = 'en';

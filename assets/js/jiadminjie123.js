@@ -33,6 +33,12 @@
   function utf8ToB64(str) { return btoa(unescape(encodeURIComponent(str))); }
   function b64ToUtf8(b64) { return decodeURIComponent(escape(atob((b64 || '').replace(/\s/g, '')))); }
 
+  // ---- i18n (reuses the site's i18n.js: switcher, lang state, dictionary) ----
+  function L() { return (window.I18N ? window.I18N.lang : 'en'); }
+  function t(s) { return (window.I18N ? window.I18N.tx(s) : s); }
+  function errPrefix() { return L() === 'zh' ? '错误：' : 'Error: '; }
+  var COLL_EN = { geometric: 'Classic Geometric', artistic: 'Artistic Inlay', plank: 'Herringbone, Chevron & Plank' };
+
   // Self-contained SHA-256 (no crypto.subtle, so it works in any context: http, file://, LAN IP).
   function sha256hex(ascii) {
     function rotr(n, x) { return (x >>> n) | (x << (32 - n)); }
@@ -242,32 +248,36 @@
     e.preventDefault();
     try {
       if (sha256hex($('pass').value) === PASS_HASH) { sessionStorage.setItem('adm_ok', '1'); unlock(true); }
-      else { $('gate-err').textContent = 'Wrong passphrase.'; }
-    } catch (err) { $('gate-err').textContent = 'Error: ' + err.message; }
+      else { $('gate-err').textContent = t('Wrong passphrase.'); }
+    } catch (err) { $('gate-err').textContent = errPrefix() + err.message; }
   });
 
   // ===== UI: token =====
+  function renderTokenBadge() {
+    $('token-badge').innerHTML = t('token saved') + ' <button type="button" id="tok-clear">' + t('change') + '</button>';
+    $('tok-clear').addEventListener('click', clearToken);
+  }
+  function clearToken() {
+    localStorage.removeItem('gh_token'); token = '';
+    show($('tools'), false); $('token-badge').textContent = '';
+    $('token-input').value = ''; $('token-status').textContent = '';
+    show($('token-setup'), true);
+  }
   function enterTools() {
     show($('token-setup'), false);
     show($('tools'), true);
-    $('token-badge').innerHTML = 'token saved <button type="button" id="tok-clear">change</button>';
-    $('tok-clear').addEventListener('click', function () {
-      localStorage.removeItem('gh_token'); token = '';
-      show($('tools'), false); $('token-badge').textContent = '';
-      $('token-input').value = ''; $('token-status').textContent = '';
-      show($('token-setup'), true);
-    });
+    renderTokenBadge();
     fillSelects();
-    refreshAdmin().then(renderList).catch(function (e) { setStatus('manage-status', 'Could not load products: ' + e.message, true); });
+    refreshAdmin().then(renderList).catch(function (e) { setStatus('manage-status', (L() === 'zh' ? '无法加载产品：' : 'Could not load products: ') + e.message, true); });
   }
   $('token-form').addEventListener('submit', function (e) {
     e.preventDefault();
-    var t = $('token-input').value.trim();
-    if (!t) return;
-    $('token-status').textContent = 'Checking token…'; $('token-status').className = 'status err';
-    token = t;
+    var tk = $('token-input').value.trim();
+    if (!tk) return;
+    $('token-status').textContent = t('Checking token…'); $('token-status').className = 'status err';
+    token = tk;
     fetch(REPO_URL, { headers: authHeaders(), cache: 'no-store' }).then(function (r) {
-      if (!r.ok) throw new Error(r.status === 401 ? 'Token rejected (401). Check it and try again.' : 'GitHub error (' + r.status + ').');
+      if (!r.ok) throw new Error(r.status === 401 ? t('Token rejected (401). Check it and try again.') : ((L() === 'zh' ? 'GitHub 错误（' : 'GitHub error (') + r.status + (L() === 'zh' ? '）' : ')')));
       localStorage.setItem('gh_token', token);
       $('token-status').textContent = '';
       enterTools();
@@ -301,13 +311,13 @@
       var pv = $('preview'); pv.innerHTML = ''; pv.appendChild(gridCanvas);
       URL.revokeObjectURL(img.src);
       setStatus('add-status', '');
-    }).catch(function () { setStatus('add-status', 'Could not read that image.', true); });
+    }).catch(function () { setStatus('add-status', t('Could not read that image.'), true); });
   });
   $('add-form').addEventListener('submit', function (e) {
     e.preventDefault();
-    if (!gridCanvas || !detailCanvas) { setStatus('add-status', 'Choose a photo first.', true); return; }
+    if (!gridCanvas || !detailCanvas) { setStatus('add-status', t('Choose a photo first.'), true); return; }
     var name = sanitize($('f-name').value);
-    if (!name) { setStatus('add-status', 'Name is required.', true); return; }
+    if (!name) { setStatus('add-status', t('Name is required.'), true); return; }
     var code = sanitize($('f-code').value) || ('A' + (adminData.adds.length + 1));
     var slug = uniqueSlug(slugify(name) + (slugify(code) ? '-' + slugify(code) : ''));
     var product = {
@@ -319,13 +329,15 @@
     var size = sanitize($('f-size').value); if (size) product.size = size;
     var zh = sanitize($('f-namezh').value); if (zh) product.name_zh = zh;
 
-    setStatus('add-status', 'Publishing… this takes a few seconds.');
+    setStatus('add-status', t('Publishing… this takes a few seconds.'));
     $('add-submit').disabled = true;
     doAdd(product, canvasToB64(gridCanvas, 0.82), canvasToB64(detailCanvas, 0.85)).then(function () {
-      setStatus('add-status', '✓ Added “' + name + '” (slug: ' + slug + '). Live in about a minute.', false, true);
+      setStatus('add-status', (L() === 'zh'
+        ? ('✓ 已添加“' + name + '”（slug：' + slug + '）。约一分钟后上线。')
+        : ('✓ Added “' + name + '” (slug: ' + slug + '). Live in about a minute.')), false, true);
       $('add-form').reset(); $('preview').innerHTML = ''; gridCanvas = detailCanvas = null;
     }).catch(function (err) {
-      setStatus('add-status', 'Error: ' + err.message, true);
+      setStatus('add-status', errPrefix() + err.message, true);
     }).then(function () { $('add-submit').disabled = false; });
   });
 
@@ -337,32 +349,34 @@
       if (!q) return true;
       return (p.name + ' ' + p.code + ' ' + p.collection + ' ' + (p.species || '') + ' ' + (p.family || '')).toLowerCase().indexOf(q) > -1;
     });
-    $('list-count').textContent = items.length + (items.length === 1 ? ' product' : ' products');
+    $('list-count').textContent = (L() === 'zh') ? (items.length + ' 个产品') : (items.length + (items.length === 1 ? ' product' : ' products'));
     var wrap = $('prod-list'); wrap.innerHTML = '';
     items.forEach(function (p) {
       var hidden = isHidden(p.slug);
+      var meta = 'No. ' + escHtml(p.code) + ' · ' + escHtml(t(COLL_EN[p.collection] || p.collection)) + (p.species ? ' · ' + escHtml(t(p.species)) : '');
       var row = document.createElement('div');
       row.className = 'prow' + (hidden ? ' is-hidden' : '');
       row.innerHTML =
         '<img class="pthumb" loading="lazy" src="' + GRID_DIR + escHtml(p.slug) + '.jpg" alt="" onerror="this.style.visibility=\'hidden\'">' +
         '<div class="pmeta"><div class="pn">' + escHtml(p.name) + '</div>' +
-        '<div class="pc">No. ' + escHtml(p.code) + ' · ' + escHtml(p.collection) + (p.species ? ' · ' + escHtml(p.species) : '') + '</div></div>' +
-        (hidden ? '<span class="badge">hidden</span>' : '') +
-        '<button class="rowbtn ' + (hidden ? 'restore' : 'del') + '" data-slug="' + escHtml(p.slug) + '">' + (hidden ? 'Restore' : 'Delete') + '</button>';
+        '<div class="pc">' + meta + '</div></div>' +
+        (hidden ? '<span class="badge">' + t('hidden') + '</span>' : '') +
+        '<button class="rowbtn ' + (hidden ? 'restore' : 'del') + '" data-slug="' + escHtml(p.slug) + '">' + (hidden ? t('Restore') : t('Delete')) + '</button>';
       wrap.appendChild(row);
     });
   }
   $('prod-list').addEventListener('click', function (e) {
     var b = e.target.closest('.rowbtn'); if (!b) return;
     var slug = b.dataset.slug, restore = b.classList.contains('restore');
-    if (!restore && !confirm('Hide “' + slug + '” from the catalogue?')) return;
+    var ask = (L() === 'zh') ? ('确定要从目录中隐藏“' + slug + '”吗？') : ('Hide “' + slug + '” from the catalogue?');
+    if (!restore && !confirm(ask)) return;
     b.disabled = true; b.textContent = '…';
     (restore ? doRestore(slug) : doDelete(slug)).then(function () {
-      setStatus('manage-status', '✓ Saved. Live in about a minute.', false, true);
+      setStatus('manage-status', t('✓ Saved. Live in about a minute.'), false, true);
       renderList();
     }).catch(function (err) {
-      setStatus('manage-status', 'Error: ' + err.message, true);
-      b.disabled = false; b.textContent = restore ? 'Restore' : 'Delete';
+      setStatus('manage-status', errPrefix() + err.message, true);
+      b.disabled = false; b.textContent = restore ? t('Restore') : t('Delete');
     });
   });
 
@@ -370,6 +384,21 @@
     var el = $(id); el.textContent = msg;
     el.className = 'status' + (isErr ? ' err' : '') + (isOk ? ' ok' : '');
   }
+
+  // ===== language: placeholders + re-render on toggle =====
+  function applyPlaceholders() {
+    [['pass', 'Passphrase'], ['f-name', 'e.g. Oak · Versailles'], ['f-code', 'auto if blank'],
+     ['f-family', 'e.g. Versailles'], ['f-species', 'e.g. Oak (blank ok)'], ['f-size', 'e.g. 600×125×14.5/1.2mm'],
+     ['f-namezh', 'e.g. 橡木·凡尔赛'], ['search', 'Search name, code, species…']
+    ].forEach(function (p) { var el = $(p[0]); if (el) el.placeholder = t(p[1]); });
+  }
+  function onLang() {
+    applyPlaceholders();
+    if (!$('tools').hidden) { renderTokenBadge(); renderList(); }
+  }
+  document.addEventListener('langchange', onLang);
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', applyPlaceholders);
+  else applyPlaceholders();
 
   // ===== boot =====
   if (sessionStorage.getItem('adm_ok') === '1') unlock();
