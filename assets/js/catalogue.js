@@ -1,7 +1,8 @@
 /* Catalogue: render grid, combinable filters, lightbox with deep-linking.
    Language-aware via window.I18N (see i18n.js). Depends on window.PRODUCTS. */
 (function () {
-  var P = window.PRODUCTS || [];
+  var HIDDEN = window.HIDDEN_PRODUCTS || [];
+  var P = (window.PRODUCTS || []).filter(function (p) { return HIDDEN.indexOf(p.slug) === -1; });
   var grid = document.getElementById('catgrid');
   if (!grid) return;
 
@@ -34,6 +35,7 @@
 
   function nameOf(p) {
     if (L() !== 'zh') return p.name;
+    if (p.name_zh) return p.name_zh;
     return p.species ? (T(p.species) + '·' + T(p.family)) : T(p.name);
   }
 

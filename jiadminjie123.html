@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>·</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500&family=Hanken+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{ --paper:#F2ECE2; --ink:#2A2620; --clay:#AE6A4A; --line:rgba(42,38,32,.16); --muted:#6f675c; }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:'Hanken Grotesk',system-ui,sans-serif;font-size:15px;line-height:1.5}
+  h1,h2,h3{font-family:'Fraunces',Georgia,serif;font-weight:500;letter-spacing:-.01em;margin:0}
+  a{color:var(--clay)}
+  .wrap{max-width:760px;margin:0 auto;padding:28px 20px 80px}
+  .idx{color:var(--clay);font-size:12px;letter-spacing:.18em;text-transform:uppercase;font-weight:600}
+
+  /* gate */
+  .gate{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}
+  .card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:30px;width:100%;max-width:360px;box-shadow:0 10px 40px rgba(42,38,32,.08)}
+  .card h1{font-size:24px;margin-bottom:6px}
+  .card p.sub{color:var(--muted);font-size:13.5px;margin:0 0 20px}
+
+  label{display:block;font-size:12.5px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);margin:0 0 6px}
+  input[type=text],input[type=password],select,textarea{width:100%;padding:11px 13px;border:1px solid var(--line);border-radius:9px;background:#fff;color:var(--ink);font:inherit}
+  input:focus,select:focus{outline:none;border-color:var(--clay)}
+  .field{margin-bottom:16px}
+  .row2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  .btn{appearance:none;border:none;background:var(--ink);color:#fff;padding:11px 18px;border-radius:9px;font:inherit;font-weight:600;cursor:pointer}
+  .btn:hover{background:#000}
+  .btn:disabled{opacity:.5;cursor:default}
+  .btn--clay{background:var(--clay)}
+  .btn--ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
+  .btn--sm{padding:7px 12px;font-size:13px;border-radius:7px}
+  .err{color:#a13b2a;font-size:13.5px;min-height:1.2em;margin:10px 0 0}
+  .ok{color:#4a7c3f}
+
+  header.top{display:flex;align-items:baseline;justify-content:space-between;gap:14px;border-bottom:1px solid var(--line);padding-bottom:16px;margin-bottom:22px}
+  header.top h1{font-size:22px}
+  .token-badge{font-size:12px;color:var(--muted)}
+  .token-badge button{background:none;border:none;color:var(--clay);cursor:pointer;font:inherit;padding:0;margin-left:8px;text-decoration:underline}
+
+  .tabs{display:flex;gap:6px;margin-bottom:22px}
+  .tab{appearance:none;border:1px solid var(--line);background:#fff;padding:9px 16px;border-radius:999px;font:inherit;font-weight:600;cursor:pointer;color:var(--ink)}
+  .tab.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+
+  .help{background:#fff;border:1px solid var(--line);border-radius:11px;padding:16px 18px;font-size:13.5px;color:var(--muted);margin-bottom:20px}
+  .help code{background:var(--paper);padding:1px 5px;border-radius:4px;color:var(--ink)}
+
+  .preview{margin-top:10px}
+  .preview canvas{max-width:140px;height:auto;border:1px solid var(--line);border-radius:9px;display:block}
+  .status{font-size:14px;margin-top:16px;min-height:1.3em}
+
+  .toolbar{display:flex;align-items:center;gap:12px;margin-bottom:14px}
+  .toolbar input{flex:1}
+  .list-count{font-size:13px;color:var(--muted);white-space:nowrap}
+  .prow{display:flex;align-items:center;gap:14px;padding:10px;border:1px solid var(--line);border-radius:11px;background:#fff;margin-bottom:9px}
+  .prow.is-hidden{opacity:.55}
+  .pthumb{width:54px;height:54px;object-fit:cover;border-radius:7px;background:var(--paper);flex:none}
+  .pmeta{flex:1;min-width:0}
+  .pn{font-weight:600}
+  .pc{font-size:12.5px;color:var(--muted)}
+  .badge{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#a13b2a;background:rgba(161,59,42,.1);padding:3px 8px;border-radius:999px}
+  .rowbtn{appearance:none;border:1px solid var(--line);background:#fff;border-radius:8px;padding:8px 13px;font:inherit;font-weight:600;cursor:pointer;flex:none}
+  .rowbtn.del{color:#a13b2a;border-color:rgba(161,59,42,.4)}
+  .rowbtn.restore{color:#4a7c3f;border-color:rgba(74,124,63,.4)}
+  .rowbtn:hover{background:var(--paper)}
+</style>
+</head>
+<body>
+
+<!-- GATE -->
+<div class="gate" id="gate">
+  <form class="card" id="gate-form" autocomplete="off">
+    <h1>Restricted</h1>
+    <p class="sub">Enter the passphrase to continue.</p>
+    <div class="field">
+      <input type="password" id="pass" placeholder="Passphrase" autocomplete="off" autofocus>
+    </div>
+    <button class="btn" type="submit" style="width:100%">Enter</button>
+    <p class="err" id="gate-err"></p>
+  </form>
+</div>
+
+<!-- APP -->
+<div class="wrap" id="app" hidden>
+  <header class="top">
+    <h1>Catalogue admin</h1>
+    <span class="token-badge" id="token-badge"></span>
+  </header>
+
+  <!-- TOKEN SETUP -->
+  <section id="token-setup" hidden>
+    <div class="help">
+      To publish changes you need a <strong>GitHub access token</strong> for the
+      <code>lancelot74/JijieFlooring</code> repository. Create a
+      <a href="https://github.com/settings/tokens?type=beta" target="_blank" rel="noopener">fine-grained token</a>
+      scoped to <em>only that repository</em> with <strong>Contents: Read and write</strong>, then paste it below.
+      It is stored only in this browser and never published.
+    </div>
+    <form id="token-form" autocomplete="off">
+      <div class="field">
+        <label for="token-input">GitHub token</label>
+        <input type="password" id="token-input" placeholder="github_pat_…" autocomplete="off">
+      </div>
+      <button class="btn" type="submit">Save token</button>
+      <p class="status err" id="token-status"></p>
+    </form>
+  </section>
+
+  <!-- TOOLS -->
+  <section id="tools" hidden>
+    <div class="tabs">
+      <button class="tab on" id="tab-btn-add" type="button">Add product</button>
+      <button class="tab" id="tab-btn-manage" type="button">Manage / delete</button>
+    </div>
+
+    <!-- ADD -->
+    <section id="tab-add">
+      <form id="add-form" autocomplete="off">
+        <div class="field">
+          <label for="f-photo">Product photo</label>
+          <input type="file" id="f-photo" accept="image/*">
+          <div class="preview" id="preview"></div>
+        </div>
+        <div class="field">
+          <label for="f-name">Name <span style="color:var(--clay)">*</span></label>
+          <input type="text" id="f-name" placeholder="e.g. Oak · Versailles">
+        </div>
+        <div class="row2">
+          <div class="field">
+            <label for="f-collection">Collection</label>
+            <select id="f-collection"></select>
+          </div>
+          <div class="field">
+            <label for="f-code">Reference code</label>
+            <input type="text" id="f-code" placeholder="auto if blank">
+          </div>
+        </div>
+        <div class="row2">
+          <div class="field">
+            <label for="f-family">Pattern family</label>
+            <input type="text" id="f-family" list="dl-family" placeholder="e.g. Versailles">
+            <datalist id="dl-family"></datalist>
+          </div>
+          <div class="field">
+            <label for="f-species">Wood species</label>
+            <input type="text" id="f-species" list="dl-species" placeholder="e.g. Oak (blank ok)">
+            <datalist id="dl-species"></datalist>
+          </div>
+        </div>
+        <div class="row2">
+          <div class="field">
+            <label for="f-size">Size (optional)</label>
+            <input type="text" id="f-size" placeholder="e.g. 600×125×14.5/1.2mm">
+          </div>
+          <div class="field">
+            <label for="f-namezh">中文名 (optional)</label>
+            <input type="text" id="f-namezh" placeholder="e.g. 橡木·凡尔赛">
+          </div>
+        </div>
+        <button class="btn btn--clay" type="submit" id="add-submit">Publish product</button>
+        <p class="status" id="add-status"></p>
+      </form>
+    </section>
+
+    <!-- MANAGE -->
+    <section id="tab-manage" hidden>
+      <div class="toolbar">
+        <input type="text" id="search" placeholder="Search name, code, species…">
+        <span class="list-count" id="list-count"></span>
+      </div>
+      <div id="prod-list"></div>
+      <p class="status" id="manage-status"></p>
+    </section>
+  </section>
+</div>
+
+<script src="assets/js/products.js"></script>
+<script src="assets/js/products-online.js"></script>
+<script>window.__GEN_PRODUCTS = (window.PRODUCTS || []).slice();</script>
+<script src="assets/js/products-admin.js"></script>
+<script src="assets/js/jiadminjie123.js"></script>
+</body>
+</html>
